@@ -1,10 +1,10 @@
-# Murabei test
+# Books
 
 ## Description
 
-Esse e o teste para Desenvolvedor FullStack na Murabei Data Science, usando Docker, Python, Nextjs and sqlite3.
+Este é um projeto utilizando Docker, Python, Next.js e sqlite3.
 
-O objetivo deste teste e avaliar a capcidade do desenvolvedor em criar uma aplicacao Frontend e integra-la em uma API Python. Toda a aplicacao e mantida em containers Docker, e roda usando docker compose. Esta e a mesma arquitetura usada em todos os projetos internos da Murabei.
+O objetivo deste projeto é criar uma aplicação Frontend e integrá-la em uma API Python. Toda a aplicação é mantida em containers Docker e é executada usando docker-compose.
 
 ## Instrucoes
 
@@ -20,7 +20,7 @@ Ja na pasta **_backend_** esta a API de livros, em Python Flask. Esta API tem um
 
 Esta pasta possui um script **build.bash**, que builda a imagem docker a ser utilizada no **docker-compose.yml**.
 
-E, a pasta **_frontend_**, onde devem ser colocados codigos do FE. Aqui na Murabei, utilizamos o NextJS como framework de React, logo, seu FE deve ser desenolvido em NextJS, pelo menos, na versao 13, que ja possui **_Server Components_** e **_Server Actions_**.
+E, a pasta **_frontend_**, onde devem ser colocados codigos do FE. Usamos o NextJS como framework de React, que já possui **_Server Components_** e **_Server Actions_**.
 
 ## Inicializacao
 
@@ -34,41 +34,36 @@ O FE deve rodar junto com os outros servicos em docker, ou seja, deve ser adicio
 
 **IMPORTANTE**: ao rodar o **docker-compose.yml**, o FE deve subir junto com os outros servicos.
 
-## Avaliacao
+## Objetivos do Projeto
 
-Aqui vao os pontos que sera avaliados no teste:
+O objetivo deste projeto é criar uma aplicação Frontend em Next.js que realize as operações básicas de CRUD, como listar, criar e deletar livros, além de permitir buscar esses livros pelo título ou pelo autor.
 
-**_Obrigatorios_**
+**IMPORTANTE**: ao executar o docker-compose.yml, o Frontend é iniciado junto com os outros serviços.
 
-- O FE deve possuir uma imagem docker, e rodar junto com os outros servicos no **_docker-compose.yml_** (1 ponto)
-- O FE deve possuir uma tela de listagem dos livros (1 ponto)
-- O FE deve possuir uma tela de busca de livros por titulo (1 ponto)
-- O FE deve possuir uma tela de busca de livros por autor (1 ponto)
-- O FE deve possuir uma tela de criacao de livros (1 ponto)
-- O FE deve possuir uma funcao de de deletar livros (1 ponto)
-- As telas devem ser feitas usando componentes da biblioteca [shadcn/ui](https://ui.shadcn.com/) (1 ponto)
+## Detalhes do projeto
 
-**Total: 7 pontos**
+Aqui vão os pontos principais do projeto:
 
-**_Pontos extras_**
-
-- Fazer o deploy publico da aplicacao em qualquer servico que aceite as imagens docker (1 ponto)
-- Adicionar testes (unitarios ou end-to-end) (1 pontos)
-- Uso do Typescript (1 ponto)
-
-**Total: 3 pontos**
+- O FE possui uma imagem docker, e rodar junto com os outros servicos no **_docker-compose.yml_**
+- O FE possui uma tela de listagem dos livros
+- O FE possui uma tela de busca de livros por título
+- O FE possui uma tela de busca de livros por autor
+- O FE possui uma tela de criação de livros
+- O FE possui uma função de de deletar livros
+- As telas devem ser feitas usando componentes da biblioteca [shadcn/ui](https://ui.shadcn.com/)
+- Uso do Typescript
 
 ### Criterios tecnicos
 
-Alem da avaliacao das funcionalidades do FE, tambem serao levados em consideracao aspectos tecnicos como:
+Além das funcionalidades do FE, os critérios técnicos abaixo também foram incluídos:
 
-- Componentizacao:
-  - Criacao de componentes reutilizaveis
-- Organizacao
-  - Clareza e legibilidade do codigo
-  - Comentarios e documentacao
-  - Organizacao clara das pastas e arquivos
-- Principios
+- Componentização:
+  - Criação de componentes reutilizaveis
+- Organização
+  - Clareza e legibilidade do código
+  - Comentários e documentação
+  - Organização clara das pastas e arquivos
+- Princípios
   - Clean Code
   - DRY
   - MVC
