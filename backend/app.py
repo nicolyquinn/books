@@ -28,7 +28,14 @@ def get_books():
     return jsonify(books)
 
 
-# GET /api/v1/books/author/<author> - returns a list of all books by the given author
+# GET /api/v1/books/author/<author> - returns a book by the given title
+
+
+@app.route('/api/v1/books/<title_slug>', methods=['GET'])
+def get_books_by_title(title_slug):
+    return jsonify(get_books_by_title_slug(title_slug))
+
+# GET /api/v1/books/<book_slug> - returns a list of all books by the given author
 
 
 @app.route('/api/v1/books/author/<author_slug>', methods=['GET'])
@@ -36,7 +43,6 @@ def get_books_by_author(author_slug):
     return jsonify(get_books_by_author_name(author_slug))
 
 # GET /api/v1/books/subject/<subject_slug> - returns a list of all books by the given subject
-
 
 @app.route('/api/v1/books/subjects', methods=['GET'])
 def get_books_by_subject():
@@ -56,6 +62,29 @@ def books_by_subject_slug(subject):
 def get_all_authors():
     return jsonify(get_authors())
 
+
+# POST /api/v1/books/delete/<int:book_id> - delete a book
+
+@app.route('/api/v1/books/delete/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id):
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    if request.method == 'DELETE':
+        # Execute a DELETE query to delete the book with the specified book_id
+        cursor.execute("DELETE FROM book WHERE id = ?", (book_id,))
+        
+        # Commit the changes to the database
+        conn.commit()
+
+        # Close the database connection
+        conn.close()
+
+        # Return a response indicating success
+        return jsonify({'message': 'Book deleted successfully.'}), 200
+    else:
+        return jsonify({'error': 'Method Not Allowed'}), 405
+    
 # POST /api/v1/books - creates a new book
 
 
@@ -67,6 +96,34 @@ def create_book():
 
     return jsonify(create_new_book(book_data))
 
+
+def create_new_book(book_data):
+    # Get the book data from the request body
+    title = book_data['title']
+    author = book_data['author']
+    author_slug = book_data['author_slug']
+    author_bio = book_data['author_bio']
+    authors = book_data['authors']
+    publisher = book_data['publisher']
+    synopsis = book_data['synopsis']
+
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    # Execute a query to create a new book
+    cursor.execute("INSERT INTO book (title, author, author_slug, author_bio, authors, publisher, synopsis) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                   (title, author, author_slug, author_bio, authors, publisher, synopsis))
+
+    # Commit the changes to the database
+    conn.commit()
+
+    # Close the database connection
+    conn.close()
+
+    # Return a message to the user
+    return {'message': 'Book created successfully.'}, 201
+
+# GET ALL BOOKS
 
 def get_all_books(page=1, page_size=10):
     conn = sqlite3.connect('db.sqlite')
@@ -86,7 +143,8 @@ def get_all_books(page=1, page_size=10):
             'id': book[0],
             'title': book[1],
             'author': book[2],
-            'biography': book[4]
+            'biography': book[4],
+            'title_slug': book[6]
         }
         book_list.append(book_dict)
 
@@ -167,6 +225,33 @@ def get_books_by_subject():
 
     return subjects
 
+def get_books_by_title_slug(title_slug):
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    # Execute a SELECT query to fetch books by title
+    cursor.execute(
+        'SELECT * FROM book WHERE title_slug = ?;', (title_slug,))
+    books = cursor.fetchall()
+    # Convert the books data to a list of dictionaries
+    book_list = []
+    for book in books:
+        book_dict = {
+            'id': book[0],
+            'title': book[1],
+            'author': book[2],
+            'biography': book[4],
+            'authors': book[5],
+            'publisher': book[12],
+            'synopsis': book[21],
+        }
+        book_list.append(book_dict)
+
+    # Close the database connection
+    conn.close()
+
+    # Return the books as a JSON response
+    return book_list
 
 def get_books_by_subject_slug(subject):
     conn = sqlite3.connect('db.sqlite')
@@ -202,33 +287,7 @@ def get_books_by_subject_slug(subject):
 
     # Return the books as a JSON response
     return book_list
-
-
-def create_new_book(book_data):
-    conn = sqlite3.connect('db.sqlite')
-    cursor = conn.cursor()
-
-    # Get the book data from the request body
-    title = book_data['title']
-    author = book_data['author']
-    author_slug = book_data['author_slug']
-    author_bio = book_data['author_bio']
-    authors = book_data['authors']
-    publisher = book_data['publisher']
-    synopsis = book_data['synopsis']
-
-    # Execute a query to create a new book
-    cursor.execute('INSERT INTO book (title, author, author_slug, author_bio, authors, publisher, synopsis) VALUES (?, ?, ?, ?, ?, ?, ?);',
-                   (title, author, author_slug, author_bio, authors, publisher, synopsis))
-
-    # Commit the changes to the database
-    conn.commit()
-
-    # Close the database connection
-    conn.close()
-
-    # Return a message to the user
-    return {'message': 'Book created successfully.'}, 201
+    
 
 
 # # GET /api/v1/books
